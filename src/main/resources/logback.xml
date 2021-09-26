@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 从高到地低 OFF 、 FATAL 、 ERROR 、 WARN 、 INFO 、 DEBUG 、 TRACE 、 ALL -->
+<!-- 日志输出规则  根据当前ROOT 级别，日志输出时，级别高于root默认的级别时  会输出 -->
+<!-- 以下  每个配置的 filter 是过滤掉输出文件里面，会出现高级别文件，依然出现低级别的日志信息，通过filter 过滤只记录本级别的日志-->
+
+<!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，
+如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <logger name="org.apache.commons.httpclient.HttpMethodBase" level="ERROR"/>
+    <!-- 定义日志文件 输入位置 -->
+    <property name="log_dir" value="./logs/jstream/"/>
+    <!-- 日志最大的历史 3天 -->
+    <property name="maxHistory" value="3"/>
+    <property name="cleanHistoryOnStart" value="true"/>
+    <property name="logPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35}-%-4L |- %msg%n"/>
+    <property name="colorLogPattern"
+              value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlightex(%-5level) %cyan(%logger{35})-%-4L |- %msg%n"/>
+
+    <!-- custom coloring conversion -->
+    <conversionRule conversionWord="highlightex"
+                    converterClass="com.alibaba.jstream.log.HighlightingCompositeConverter"/>
+
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 对日志进行格式化 -->
+        <encoder>
+            <pattern>${colorLogPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- COLOR级别日志 appender -->
+    <appender name="COLOR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/console_%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${colorLogPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只记录ERROR级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 最常用的滚动策略，它根据时间来制定滚动策略.既负责滚动也负责触发滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志输出位置  可相对、和绝对路径 -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/error.log</fileNamePattern>
+            <!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件假设设置每个月滚动，且<maxHistory>是6，
+            则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除-->
+            <maxHistory>${maxHistory}</maxHistory>
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只记录WARN级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/warn.log</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只记录INFO级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/info.log</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只记录DEBUG级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/debug.log</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- root级别   DEBUG -->
+    <root level="info">
+        <!-- 颜色文件输出 -->
+        <appender-ref ref="COLOR"/>
+        <!-- 控制台输出 -->
+        <appender-ref ref="STDOUT"/>
+        <!-- 文件输出 -->
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+        <appender-ref ref="DEBUG"/>
+        <!--<appender-ref ref="TRACE" />-->
+    </root>
+</configuration>
