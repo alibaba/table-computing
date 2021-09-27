@@ -35,6 +35,7 @@ import static com.alibaba.jstream.SystemProperty.getServerCount;
 import static com.alibaba.jstream.Threads.threadsNamed;
 import static com.alibaba.jstream.sp.input.kafka.MyKafkaConsumer.newKafkaConsumer;
 import static java.lang.Integer.toHexString;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
@@ -44,7 +45,6 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_
 import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_RECORDS_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
-import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 
 public class KafkaStreamTable extends AbstractStreamTable {
     private static final Logger logger = LoggerFactory.getLogger(KafkaStreamTable.class);

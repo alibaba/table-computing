@@ -1,7 +1,7 @@
 package com.alibaba.jstream.sp.input;
 
 import com.alibaba.jstream.table.Type;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;

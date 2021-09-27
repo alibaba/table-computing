@@ -9,7 +9,7 @@ import com.alibaba.jstream.table.Type;
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +105,7 @@ public class MysqlOutputTable extends AbstractOutputTable {
         createTable();
     }
 
-    private Connection connect() {
+    private Connection connect() throws SQLException {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setUrl(jdbcUrl);
         dataSource.setUser(userName);
@@ -264,11 +264,11 @@ public class MysqlOutputTable extends AbstractOutputTable {
             threadPoolExecutor.submit(new Runnable() {
                 @Override
                 public void run() {
-                    Connection connection = connect();
-                    PreparedStatement batchPreparedStatement = prepareStatement(connection,
-                            batchSize * columnTypeMap.size());
-                    while (!Thread.interrupted()) {
-                        try {
+                    try {
+                        Connection connection = connect();
+                        PreparedStatement batchPreparedStatement = prepareStatement(connection,
+                                batchSize * columnTypeMap.size());
+                        while (!Thread.interrupted()) {
                             Table table = consume();
                             List<Column> columns = table.getColumns();
                             if (columns.size() != columnTypeMap.size()) {
@@ -289,13 +289,11 @@ public class MysqlOutputTable extends AbstractOutputTable {
                             if (values.size() > 0) {
                                 insert(connection, batchPreparedStatement, values);
                             }
-                        } catch (InterruptedException e) {
-                            logger.info("interrupted");
-                            break;
-                        } catch (Throwable t) {
-                            handleException(t);
-                            break;
                         }
+                    } catch (InterruptedException e) {
+                        logger.info("interrupted");
+                    } catch (Throwable t) {
+                        handleException(t);
                     }
                 }
             });

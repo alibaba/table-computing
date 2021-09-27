@@ -10,7 +10,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <logger name="org.apache.commons.httpclient.HttpMethodBase" level="ERROR"/>
     <!-- 定义日志文件 输入位置 -->
-    <property name="log_dir" value="./logs/jstream/"/>
+    <property name="log_dir" value="./logs/tc/"/>
     <!-- 日志最大的历史 3天 -->
     <property name="maxHistory" value="3"/>
     <property name="cleanHistoryOnStart" value="true"/>
@@ -20,7 +20,7 @@
 
     <!-- custom coloring conversion -->
     <conversionRule conversionWord="highlightex"
-                    converterClass="com.alibaba.jstream.log.HighlightingCompositeConverter"/>
+                    converterClass="com.alibaba.tc.log.HighlightingCompositeConverter"/>
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

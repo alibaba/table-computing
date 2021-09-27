@@ -6,7 +6,7 @@ import com.alibaba.jstream.table.Index;
 import com.alibaba.jstream.table.Table;
 import com.alibaba.jstream.table.TableBuilder;
 import com.alibaba.jstream.table.Type;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,13 +5,13 @@
   <groupId>com.alibaba</groupId>  
   <artifactId>table-computing</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <parent> 
-    <artifactId>parent-pom</artifactId>  
-    <groupId>com.alibaba</groupId>  
-    <version>1.0.0</version> 
-  </parent>
 
   <dependencies>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.26</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
@@ -27,12 +27,7 @@
       <artifactId>netty-all</artifactId>
       <version>4.1.67.Final</version>
     </dependency>
-    <dependency> 
-      <groupId>com.alibaba.sdb</groupId>  
-      <artifactId>sdb-jdbc</artifactId>  
-      <version>1.1-SNAPSHOT</version> 
-    </dependency>  
-    <dependency> 
+    <dependency>
       <groupId>com.aliyun.odps</groupId>  
       <artifactId>odps-sdk-core</artifactId>  
       <version>0.37.5</version>  
@@ -48,52 +43,7 @@
       <artifactId>odps-sdk-commons</artifactId>  
       <version>0.37.5</version> 
     </dependency>  
-    <dependency> 
-      <groupId>com.taobao.tddl</groupId>  
-      <artifactId>tddl-client</artifactId>  
-      <version>5.2.7-4</version> 
-    </dependency>  
-    <!-- hbase -->  
-    <dependency> 
-      <groupId>org.apache.hbase</groupId>  
-      <artifactId>hbase</artifactId>  
-      <version>0.94-adh3u9.9</version>  
-      <exclusions> 
-        <exclusion> 
-          <artifactId>slf4j-log4j12</artifactId>  
-          <groupId>org.slf4j</groupId> 
-        </exclusion>  
-        <exclusion> 
-          <artifactId>servlet-api-2.5</artifactId>  
-          <groupId>org.mortbay.jetty</groupId> 
-        </exclusion>  
-        <exclusion> 
-          <artifactId>protobuf-java</artifactId>  
-          <groupId>com.google.protobuf</groupId> 
-        </exclusion>  
-        <exclusion> 
-          <artifactId>httpclient</artifactId>  
-          <groupId>org.apache.httpcomponents</groupId> 
-        </exclusion>  
-        <exclusion> 
-          <artifactId>httpcore</artifactId>  
-          <groupId>org.apache.httpcomponents</groupId> 
-        </exclusion> 
-      </exclusions> 
-    </dependency>  
-    <dependency> 
-      <groupId>org.apache.hadoop</groupId>  
-      <artifactId>hadoop-core</artifactId>  
-      <version>0.20.2</version>  
-      <exclusions> 
-        <exclusion> 
-          <artifactId>servlet-api-2.5</artifactId>  
-          <groupId>org.mortbay.jetty</groupId> 
-        </exclusion> 
-      </exclusions> 
-    </dependency>  
-    <!-- hbase end -->  
-    <dependency> 
+    <dependency>
       <groupId>com.google.guava</groupId>  
       <artifactId>guava</artifactId>  
       <version>29.0-jre</version> 
@@ -127,8 +77,7 @@
       <groupId>com.github.oshi</groupId>  
       <artifactId>oshi-core</artifactId>  
       <version>5.2.0</version> 
-    </dependency>  
-    <!--sls-->  
+    </dependency>
     <dependency> 
       <groupId>com.google.protobuf</groupId>  
       <artifactId>protobuf-java</artifactId>  
