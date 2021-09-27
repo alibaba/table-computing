@@ -2,7 +2,7 @@
 
 Welcome to the Table-Computing GitHub.
 
-Table-Computing (Simplified as TC) is a light weighted, high performance and low latency stream processing and data analysis framework.
+Table-Computing (Simplified as TC) is a distributed light weighted, high performance and low latency stream processing and data analysis framework.
 From our using experience TC can achieve milliseconds latency and 10+ times faster than Flink for complicated use cases.
 For the same streaming task we use TC achieved 10+ times computing resource saving.
 

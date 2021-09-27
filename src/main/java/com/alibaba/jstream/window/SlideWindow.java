@@ -261,6 +261,26 @@ public class SlideWindow extends TimeWindow {
         appendRow(retTable, key, rows, windowStart, windowStart + windowSizeDurationMs);
     }
 
+    /**
+     * enter window and trigger compute if slide duration is arrived
+     *
+     * 没数据的情况下系统sleep时长默认为100ms（避免无数据情况下的CPU占用过高，见AbstractStreamTable.sleepMsWhenNoData），
+     * 因此默认小于100ms的滑动步长应该被认为无法精确处理（注意即使将该值调为1ms由于数据处理本身也要占用时间是否得到了精确处理需要自己评估）
+     *
+     * 数据间隔大于窗口大小并且sleepMsWhenNoData太大的情况下会导致窗口前进的速度跟不上数据跳跃的速度进而导致相邻的数据也会在同一窗口中
+     * 分多次触发计算而不是在同一窗口中一次完成计算
+     * 比如窗口大小为10ms滑动间隔为5ms 数据时序为 3ms，10ms，300ms，301ms，302ms
+     * 3ms的数据会在[0,10)这个窗口中触发
+     * 10ms的数据会在[5,15) [10,20)两个窗口中触发
+     * 300ms的数据超出了[10,20)这个窗口只能在[300,310)这个窗口中单独触发，窗口前进到[15,25)
+     * 301ms的数据超出了[15,25)这个窗口只能在[300,310)这个窗口中单独触发，窗口前进到[20,30)
+     * 302ms的数据超出了[20,30)这个窗口只能在[300,310)这个窗口中单独触发，窗口前进到[25,35)
+     * 如果sleepMsWhenNoData这个足够小会使没有数据的情况下窗口前进足够多次从而赶上数据的跳跃
+     * 总结：通常数据量大数据间隔非常短窗口大小明显大于数据间隔的情况下不用考虑这个问题，极端情况下需要考虑
+     *
+     * @param tables come from Rehash.rehash or Rehash.rebalance
+     * @return
+     */
     public Table slide(List<Table> tables) {
         checkTablesSize(tables);
         TableBuilder retTable = newTableBuilder(columnNames);

@@ -87,6 +87,11 @@ public class SessionWindow extends TimeWindow {
         }
     }
 
+    /**
+     * enter window and trigger compute if a window is timeout
+     * @param tables come from Rehash.rehash or Rehash.rebalance
+     * @return
+     */
     public Table session(List<Table> tables) {
         checkTablesSize(tables);
         Thread curThread = Thread.currentThread();
