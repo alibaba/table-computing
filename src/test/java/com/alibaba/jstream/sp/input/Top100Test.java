@@ -29,9 +29,10 @@ import static com.alibaba.jstream.util.WindowUtil.topN;
 
 public class Top100Test {
     /**
-     * kafka_2.13-2.8.0/bin/zookeeper-server-start.sh config/zookeeper.properties
-     * kafka_2.13-2.8.0/bin/kafka-server-start.sh config/server.properties
-     * kafka_2.13-2.8.0/bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my_topic_name --partitions 1
+     * cd kafka_2.13-2.8.0
+     * bin/zookeeper-server-start.sh config/zookeeper.properties
+     * bin/kafka-server-start.sh config/server.properties
+     * bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my_topic_name --partitions 1
      */
 
     private void produce(String bootstrapServers, String topic, Map<String, Type> columnTypeMap) throws InterruptedException {
