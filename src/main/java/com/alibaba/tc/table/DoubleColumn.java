@@ -1,9 +1,12 @@
 package com.alibaba.tc.table;
 
+import com.alibaba.tc.offheap.AbstractReferenceCounted;
+import com.alibaba.tc.offheap.ReferenceCounted;
+
 import static java.lang.Double.doubleToLongBits;
 import static java.lang.Double.longBitsToDouble;
 
-public class DoubleColumn implements ColumnInterface<Double> {
+public class DoubleColumn extends AbstractReferenceCounted implements ColumnInterface<Double> {
     private LongColumn longColumn;
 
     DoubleColumn() {
@@ -51,5 +54,18 @@ public class DoubleColumn implements ColumnInterface<Double> {
     @Override
     public long size() {
         return longColumn.size();
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        longColumn.retain();
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        super.release();
+        return longColumn.release();
     }
 }

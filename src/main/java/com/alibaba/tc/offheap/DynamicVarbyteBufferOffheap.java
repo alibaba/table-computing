@@ -3,7 +3,7 @@ package com.alibaba.tc.offheap;
 import static com.alibaba.tc.ArrayUtil.DEFAULT_CAPACITY;
 import static com.alibaba.tc.ArrayUtil.calculateNewSize;
 
-public class DynamicVarbyteBufferOffheap {
+public class DynamicVarbyteBufferOffheap extends AbstractReferenceCounted {
     private VarbyteBufferOffheap varbyteBufferOffheap;
     private long size;
 
@@ -33,7 +33,9 @@ public class DynamicVarbyteBufferOffheap {
             if (size + length > newSize) {
                 newSize = size + length;
             }
-            varbyteBufferOffheap = new VarbyteBufferOffheap(newSize).copyFrom(varbyteBufferOffheap, size);
+            VarbyteBufferOffheap tmp = new VarbyteBufferOffheap(newSize).copyFrom(varbyteBufferOffheap, size);
+            varbyteBufferOffheap.release();
+            varbyteBufferOffheap = tmp;
         }
     }
 
@@ -67,5 +69,18 @@ public class DynamicVarbyteBufferOffheap {
 
     public ByteArray get(long offset, long length) {
         return new ByteArray(varbyteBufferOffheap.get(offset, length));
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        varbyteBufferOffheap.retain();
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        super.release();
+        return varbyteBufferOffheap.release();
     }
 }

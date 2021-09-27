@@ -1,15 +1,17 @@
 package com.alibaba.tc.table;
 
 import com.alibaba.tc.ArrayUtil;
+import com.alibaba.tc.offheap.AbstractReferenceCounted;
 import com.alibaba.tc.offheap.ByteBufferOffheap;
 import com.alibaba.tc.offheap.IntBufferOffheap;
+import com.alibaba.tc.offheap.ReferenceCounted;
 
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
 import static com.alibaba.tc.offheap.InternalUnsafe.getLong;
 import static com.alibaba.tc.offheap.InternalUnsafe.putLong;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
-public class IntColumn implements ColumnInterface<Integer> {
+public class IntColumn extends AbstractReferenceCounted implements ColumnInterface<Integer> {
     private IntBufferOffheap values;
     private ByteBufferOffheap valueIsNull;
     private long size;
@@ -94,11 +96,15 @@ public class IntColumn implements ColumnInterface<Integer> {
         if (size == capacity) {
             capacity = ArrayUtil.calculateNewSize(capacity);
             if (null != valueIsNull) {
-                valueIsNull = valueIsNull.copy(size);
+                ByteBufferOffheap tmp = valueIsNull.copy(capacity);
+                valueIsNull.release();
+                valueIsNull = tmp;
                 valueIsNull.init0(size);
             }
 
-            values = values.copy(capacity);
+            IntBufferOffheap tmp = values.copy(capacity);
+            values.release();
+            values = tmp;
         }
     }
 
@@ -132,5 +138,24 @@ public class IntColumn implements ColumnInterface<Integer> {
         }
 
         return values.get(index);
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        if (null != valueIsNull) {
+            valueIsNull.retain();
+        }
+        values.retain();
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        super.release();
+        if (null != valueIsNull) {
+            valueIsNull.release();
+        }
+        return values.release();
     }
 }

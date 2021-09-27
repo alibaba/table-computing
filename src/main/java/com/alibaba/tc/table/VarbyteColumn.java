@@ -1,10 +1,12 @@
 package com.alibaba.tc.table;
 
 import com.alibaba.tc.ArrayUtil;
+import com.alibaba.tc.offheap.AbstractReferenceCounted;
 import com.alibaba.tc.offheap.ByteArray;
 import com.alibaba.tc.offheap.ByteBufferOffheap;
 import com.alibaba.tc.offheap.DynamicVarbyteBufferOffheap;
 import com.alibaba.tc.offheap.LongBufferOffheap;
+import com.alibaba.tc.offheap.ReferenceCounted;
 import com.alibaba.tc.offheap.VarbyteBufferOffheap;
 
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
@@ -12,7 +14,7 @@ import static com.alibaba.tc.offheap.InternalUnsafe.getLong;
 import static com.alibaba.tc.offheap.InternalUnsafe.putLong;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
-public class VarbyteColumn implements ColumnInterface {
+public class VarbyteColumn extends AbstractReferenceCounted implements ColumnInterface {
     private DynamicVarbyteBufferOffheap values;
     private LongBufferOffheap offsets;
     private ByteBufferOffheap valueIsNull;
@@ -106,11 +108,15 @@ public class VarbyteColumn implements ColumnInterface {
         if (size == capacity) {
             capacity = ArrayUtil.calculateNewSize(capacity);
             if (null != valueIsNull) {
-                valueIsNull = valueIsNull.copy(capacity);
+                ByteBufferOffheap tmp = valueIsNull.copy(capacity);
+                valueIsNull.release();
+                valueIsNull = tmp;
                 valueIsNull.init0(size);
             }
 
-            offsets = offsets.copy(capacity + 1);
+            LongBufferOffheap tmp = offsets.copy(capacity + 1);
+            offsets.release();
+            offsets = tmp;
         }
     }
 
@@ -176,5 +182,26 @@ public class VarbyteColumn implements ColumnInterface {
             return null;
         }
         return values.get(offsets.get(index), offsets.get(index + 1) - offsets.get(index));
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        if (null != valueIsNull) {
+            valueIsNull.retain();
+        }
+        offsets.retain();
+        values.retain();
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        super.release();
+        if (null != valueIsNull) {
+            valueIsNull.release();
+        }
+        offsets.release();
+        return values.release();
     }
 }

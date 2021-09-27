@@ -5,12 +5,10 @@ import org.openjdk.jol.info.ClassLayout;
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
-public class VarbyteBufferOffheap extends BufferOffheap
-{
+public class VarbyteBufferOffheap extends BufferOffheap {
     private static final int INSTANCE_SIZE = ClassLayout.parseClass(VarbyteBufferOffheap.class).instanceSize();
 
-    public VarbyteBufferOffheap(long size)
-    {
+    public VarbyteBufferOffheap(long size) {
         super(size);
     }
 

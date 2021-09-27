@@ -10,6 +10,8 @@ import static java.lang.Integer.parseInt;
 
 public class SystemProperty {
     public static final boolean DEBUG = parseBoolean(System.getProperty("debug"));
+    public static final boolean manualRelease = System.getProperty("release.mode") != null &&
+            System.getProperty("release.mode").equalsIgnoreCase("manual");
     private static Node self = null;
     private static List<Node> all = new ArrayList<>();
     private static int myHash = 0;

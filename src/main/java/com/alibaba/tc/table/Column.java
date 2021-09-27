@@ -2,16 +2,18 @@ package com.alibaba.tc.table;
 
 import com.alibaba.tc.exception.InconsistentColumnTypeException;
 import com.alibaba.tc.exception.UnknownTypeException;
+import com.alibaba.tc.offheap.AbstractReferenceCounted;
 import com.alibaba.tc.offheap.InternalUnsafe;
+import com.alibaba.tc.offheap.ReferenceCounted;
 import com.alibaba.tc.offheap.VarbyteBufferOffheap;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.alibaba.tc.ArrayUtil.DEFAULT_CAPACITY;
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
 import static com.alibaba.tc.offheap.InternalUnsafe.getInt;
 import static com.alibaba.tc.offheap.InternalUnsafe.putInt;
 import static com.alibaba.tc.offheap.InternalUnsafe.putLong;
-import static com.alibaba.tc.ArrayUtil.DEFAULT_CAPACITY;
 import static com.alibaba.tc.util.ScalarUtil.toDouble;
 import static com.alibaba.tc.util.ScalarUtil.toInteger;
 import static com.alibaba.tc.util.ScalarUtil.toLong;
@@ -19,7 +21,7 @@ import static com.alibaba.tc.util.ScalarUtil.toStr;
 import static java.lang.String.format;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
-public class Column<T extends Comparable> implements Serializable {
+public class Column<T extends Comparable> extends AbstractReferenceCounted implements Serializable {
     private String name;
     private Type type;
     private int preNull;
@@ -249,5 +251,23 @@ public class Column<T extends Comparable> implements Serializable {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        if (null != column) {
+            column.retain();
+        }
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        super.release();
+        if (null != column) {
+            return column.release();
+        }
+        return false;
     }
 }

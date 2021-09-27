@@ -114,7 +114,7 @@ public class SlideWindow extends TimeWindow {
                 timeColumnName,
                 null,
                 aggTimeWindowFunction,
-                StoreType.STORE_BY_COLUMN,
+                StoreType.STORE_ON_OFFHEAP,
                 returnedColumnNames);
     }
 
@@ -130,7 +130,7 @@ public class SlideWindow extends TimeWindow {
                 timeColumnName,
                 windowFunction,
                 null,
-                StoreType.STORE_BY_COLUMN,
+                StoreType.STORE_ON_OFFHEAP,
                 returnedColumnNames);
     }
 

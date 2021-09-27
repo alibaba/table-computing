@@ -107,8 +107,8 @@ public class SlideTableOffheap implements SlideTable {
     }
 
     private void realRemove() {
-        if (table.size() < 2) {
-            return;
+        if (table.size() < 1) {
+            throw new IllegalStateException("remove but no row");
         }
 
         //删掉的行数超过一半才进行一次重新整理以提升性能，最多浪费一倍内存
@@ -116,12 +116,14 @@ public class SlideTableOffheap implements SlideTable {
         if (start > this.table.size() / 2) {
             if (0 == size) {
                 //懒加载。后面需要的时候再创建表，size==0之后SortedTableByTime被整个释放掉的概率很大
+                this.table.release();
                 this.table = null;
             } else if (size > 0) {
                 Table table = createEmptyTableLike(this.table);
                 for (int i = start; i < start + size; i++) {
                     table.append(this.table, i);
                 }
+                this.table.release();
                 this.table = table;
             } else {
                 throw new IllegalStateException(format("size: %d", size));

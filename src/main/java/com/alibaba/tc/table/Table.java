@@ -9,6 +9,8 @@ import com.alibaba.tc.function.AggregationFunction;
 import com.alibaba.tc.function.OverWindowFunction;
 import com.alibaba.tc.function.ScalarFunction;
 import com.alibaba.tc.function.TransformFunction;
+import com.alibaba.tc.offheap.AbstractReferenceCounted;
+import com.alibaba.tc.offheap.ReferenceCounted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +41,7 @@ import static java.util.Objects.requireNonNull;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
 @NotThreadSafe
-public class Table {
+public class Table extends AbstractReferenceCounted {
     private static final Logger logger = LoggerFactory.getLogger(Table.class);
     private final LinkedHashMap<String, Integer> columnName2Index = new LinkedHashMap<>();
     private final List<Column> columns;
@@ -641,5 +643,23 @@ public class Table {
         }
 
         return new Table(columns);
+    }
+
+    @Override
+    public ReferenceCounted retain() {
+        super.retain();
+        for (Column column : columns) {
+            column.retain();
+        }
+        return this;
+    }
+
+    @Override
+    public boolean release() {
+        boolean ret = super.release();
+        for (Column column : columns) {
+            column.release();
+        }
+        return ret;
     }
 }
