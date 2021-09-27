@@ -20,7 +20,7 @@
 
     <!-- custom coloring conversion -->
     <conversionRule conversionWord="highlightex"
-                    converterClass="com.alibaba.jstream.log.HighlightingCompositeConverter"/>
+                    converterClass="com.alibaba.tc.log.HighlightingCompositeConverter"/>
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
