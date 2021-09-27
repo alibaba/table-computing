@@ -15,9 +15,10 @@ import static org.junit.Assert.*;
 
 public class KafkaStreamTableTest {
     /**
-     * kafka_2.13-2.8.0/bin/zookeeper-server-start.sh config/zookeeper.properties
-     * kafka_2.13-2.8.0/bin/kafka-server-start.sh config/server.properties
-     * kafka_2.13-2.8.0/bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my_topic_name --partitions 1
+     * cd kafka_2.13-2.8.0
+     * bin/zookeeper-server-start.sh config/zookeeper.properties
+     * bin/kafka-server-start.sh config/server.properties
+     * bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my_topic_name --partitions 1
      */
 
     @Test
