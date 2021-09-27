@@ -171,7 +171,8 @@ public class Top100Test {
                     assert table.getColumn("commodity_id").getInteger(0) == 3;
                     assert table.getColumn("commodity_id").getInteger(2) == 2;
                     assert table.getColumn("window_start").getLong(0) == 0L;
-                    throw new InterruptedException();
+                    //elegantly finish the streaming task when terminate condition is satisfied
+                    Thread.currentThread().interrupt();
                 }
             }
         });

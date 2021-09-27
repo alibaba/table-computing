@@ -101,7 +101,8 @@ sp.compute(new Compute() {
         table = sessionWindow.session(tables);
         if (table.size() > 0) {
             table.print();
-            throw new InterruptedException();
+            //you can elegantly finish the streaming task when terminate condition is satisfied
+            Thread.currentThread().interrupt();
         }
     }
 });
