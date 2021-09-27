@@ -1,18 +1,12 @@
 package com.alibaba.tc.offheap;
 
-import io.airlift.slice.Slice;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.alibaba.tc.offheap.InternalUnsafe.alloc;
-import static com.alibaba.tc.offheap.InternalUnsafe.allocateInstance;
 import static com.alibaba.tc.offheap.InternalUnsafe.free;
-import static com.alibaba.tc.offheap.InternalUnsafe.putInt;
-import static com.alibaba.tc.offheap.InternalUnsafe.putLong;
-import static com.alibaba.tc.offheap.InternalUnsafe.putObject;
 import static com.alibaba.tc.offheap.InternalUnsafe.setMemory;
-import static io.airlift.slice.Slices.EMPTY_SLICE;
 
 public class BufferOffheap
 {
@@ -24,26 +18,6 @@ public class BufferOffheap
 
     static long bufferOffheapSize() {
         return bufferSize.get();
-    }
-
-    public static Slice newSlice(int size)
-    {
-        if (size < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        if (0 == size) {
-            return EMPTY_SLICE;
-        }
-
-        Slice slice = (Slice) allocateInstance(Slice.class);
-        BufferOffheap bufferOffheap = new BufferOffheap(size);
-        putLong(slice, "address", bufferOffheap.addr);
-        putInt(slice, "size", size);
-        putLong(slice, "retainedSize", size + EMPTY_SLICE.getRetainedSize() + BufferOffheap.INSTANCE_SIZE);
-        putObject(slice, "reference", bufferOffheap);
-
-        return slice;
     }
 
     public BufferOffheap(long size)

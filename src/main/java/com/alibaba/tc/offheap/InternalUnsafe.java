@@ -3,7 +3,6 @@ package com.alibaba.tc.offheap;
 import com.alibaba.tc.SystemProperty;
 import com.alibaba.tc.Threads;
 import com.google.common.base.StandardSystemProperty;
-import io.airlift.slice.Slice;
 import io.airlift.units.DataSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +28,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import static io.airlift.units.DataSize.Unit.GIGABYTE;
 import static java.lang.String.format;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
-import static sun.misc.Unsafe.ARRAY_BYTE_INDEX_SCALE;
-import static sun.misc.Unsafe.ARRAY_INT_INDEX_SCALE;
 
 public class InternalUnsafe {
     private static final Logger logger = LoggerFactory.getLogger(InternalUnsafe.class);
@@ -535,22 +532,6 @@ public class InternalUnsafe {
     public static void putDouble(long addr, double value) {
         checkBound(addr, Double.BYTES);
         unsafe.putDouble(addr, value);
-    }
-
-    public static int getIntFromSlice(Slice slice, int index) {
-        return getInt(slice.getBase(), slice.getAddress() + index * ARRAY_INT_INDEX_SCALE);
-    }
-
-    public static boolean getBoolFromSlice(Slice slice, int index) {
-        return getByte(slice.getBase(), slice.getAddress() + index * ARRAY_BYTE_INDEX_SCALE) != 0;
-    }
-
-    public static void setIntToSlice(Slice slice, int index, int value) {
-        putInt(slice.getBase(), slice.getAddress() + index * ARRAY_INT_INDEX_SCALE, value);
-    }
-
-    public static void setBoolToSlice(Slice slice, int index, boolean value) {
-        putBoolean(slice.getBase(), slice.getAddress() + index * ARRAY_BYTE_INDEX_SCALE, value);
     }
 
     public static long getAndAddLong(long addr, long value) {

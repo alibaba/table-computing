@@ -58,25 +58,20 @@
       <artifactId>logback-classic</artifactId>  
       <version>1.2.6</version>
     </dependency>  
-    <dependency> 
-      <groupId>org.openjdk.jol</groupId>  
-      <artifactId>jol-core</artifactId>  
-      <version>0.2</version> 
-    </dependency>  
-    <dependency> 
-      <groupId>io.airlift</groupId>  
-      <artifactId>slice</artifactId>  
-      <version>0.38</version> 
-    </dependency>  
-    <dependency> 
-      <groupId>io.airlift</groupId>  
-      <artifactId>units</artifactId>  
-      <version>1.6</version> 
-    </dependency>  
-    <dependency> 
-      <groupId>com.github.oshi</groupId>  
-      <artifactId>oshi-core</artifactId>  
-      <version>5.2.0</version> 
+    <dependency>
+      <groupId>org.openjdk.jol</groupId>
+      <artifactId>jol-core</artifactId>
+      <version>0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>io.airlift</groupId>
+      <artifactId>units</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.oshi</groupId>
+      <artifactId>oshi-core</artifactId>
+      <version>5.2.0</version>
     </dependency>
     <dependency> 
       <groupId>com.google.protobuf</groupId>  
