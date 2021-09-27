@@ -13,9 +13,13 @@ public abstract class DimensionTable {
     /**
      * 对于只关心当前数据的场景可以使用该方法等待加载完成之后再开始读取上游的当前数据使业务延迟可以快速降下来
      */
-    public void waitForReady() throws InterruptedException {
+    public void waitForReady() {
         while (null == tableIndex) {
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -23,7 +27,7 @@ public abstract class DimensionTable {
      * 获取最新的TableIndex，使用方通过使用同一个TableIndex避免join时返回的行号不在right table里或者脏行号的问题
      * @return
      */
-    public TableIndex curTable() throws InterruptedException {
+    public TableIndex curTable() {
         waitForReady();
         return tableIndex;
     }

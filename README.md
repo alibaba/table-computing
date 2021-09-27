@@ -86,7 +86,7 @@ sp.compute(new Compute() {
         Table table = kafkaStreamTable.consume();
         table = table.select(new ScalarFunction() {
             @Override
-            public Comparable[] returnOneRow(Row row) throws InterruptedException {
+            public Comparable[] returnOneRow(Row row) {
                 Row commodity = mysqlDimensionTable.curTable().getRow(row.getInteger("commodity_id"));
                 return new Comparable[]{
                         commodity.getString("name"),
