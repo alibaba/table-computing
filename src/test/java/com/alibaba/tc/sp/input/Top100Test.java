@@ -7,6 +7,7 @@ import com.alibaba.tc.sp.Compute;
 import com.alibaba.tc.sp.Rehash;
 import com.alibaba.tc.sp.StreamProcessing;
 import com.alibaba.tc.sp.dimension.MysqlDimensionTable;
+import com.alibaba.tc.sp.dimension.TableIndex;
 import com.alibaba.tc.sp.output.KafkaOutputTable;
 import com.alibaba.tc.table.ColumnTypeBuilder;
 import com.alibaba.tc.table.Row;
@@ -151,7 +152,11 @@ public class Top100Test {
                 table = table.select(new ScalarFunction() {
                     @Override
                     public Comparable[] returnOneRow(Row row) {
-                        Row commodity = mysqlDimensionTable.curTable().getRow(row.getInteger("commodity_id"));
+                        TableIndex tableIndex = mysqlDimensionTable.curTable();
+                        // Use tableIndex.getRow but not mysqlDimensionTable.curTable().getRow. Consider that in some case
+                        // you may need to call mysqlDimensionTable.curTable() twice but the second call may correspond
+                        // to the newly reloaded dimension table which is not consistent with the first mysqlDimensionTable.curTable()
+                        Row commodity = tableIndex.getRow(row.getInteger("commodity_id"));
                         return new Comparable[]{
                                 commodity.getString("name"),
                                 commodity.getInteger("price"),
