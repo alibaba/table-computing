@@ -302,7 +302,7 @@ public class Table {
     /**
      * scalarFunction 返回null的将被过滤掉
      */
-    public Table select(ScalarFunction scalarFunction, boolean selectAll, String... additionalColumns) throws InterruptedException {
+    public Table select(ScalarFunction scalarFunction, boolean selectAll, String... additionalColumns) {
         List<Column> columns = genColumns(additionalColumns, selectAll);
 
         if (size < 1) {
@@ -320,12 +320,11 @@ public class Table {
 
         return new Table(columns);
     }
-
-
+    
     /**
      * scalarFunction 返回null或transformFunction返回null或空的将被过滤掉
      */
-    public Table select(ScalarFunction scalarFunction, TransformFunction transformFunction, boolean selectAll, String... additionalColumns) throws InterruptedException {
+    public Table select(ScalarFunction scalarFunction, TransformFunction transformFunction, boolean selectAll, String... additionalColumns) {
         List<Column> columns = genColumns(additionalColumns, selectAll);
 
         if (size < 1) {
