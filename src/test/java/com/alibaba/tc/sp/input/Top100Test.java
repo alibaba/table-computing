@@ -1,7 +1,7 @@
 package com.alibaba.tc.sp.input;
 
+import com.alibaba.tc.criteria.JoinCriteria;
 import com.alibaba.tc.function.AggTimeWindowFunction;
-import com.alibaba.tc.function.ScalarFunction;
 import com.alibaba.tc.function.TimeWindowFunction;
 import com.alibaba.tc.sp.Compute;
 import com.alibaba.tc.sp.Rehash;
@@ -9,6 +9,7 @@ import com.alibaba.tc.sp.StreamProcessing;
 import com.alibaba.tc.sp.dimension.MysqlDimensionTable;
 import com.alibaba.tc.sp.dimension.TableIndex;
 import com.alibaba.tc.sp.output.KafkaOutputTable;
+import com.alibaba.tc.table.As;
 import com.alibaba.tc.table.ColumnTypeBuilder;
 import com.alibaba.tc.table.Row;
 import com.alibaba.tc.table.Table;
@@ -108,7 +109,6 @@ public class Top100Test {
         Rehash rehashForSlideWindow = sp.rehash("uniqueNameForSlideWindow", hashBy);
         String[] returnedColumns = new String[]{"commodity_id",
                 "sales_volume",
-                "saleroom",
                 "window_start"};
         SlideWindow slideWindow = new SlideWindow(Duration.ofHours(1),
                 Duration.ofMinutes(30),
@@ -120,7 +120,6 @@ public class Top100Test {
                         return new Comparable[]{
                                 partitionByColumns.get(0),
                                 AggregationUtil.sumInt(rows, "count"),
-                                AggregationUtil.sumInt(rows, "total_price"),
                                 windowStart
                         };
                     }
@@ -149,21 +148,23 @@ public class Top100Test {
             @Override
             public void compute(int myThreadIndex) throws InterruptedException {
                 Table table = kafkaStreamTable.consume();
-                table = table.select(new ScalarFunction() {
-                    @Override
-                    public Comparable[] returnOneRow(Row row) {
-                        TableIndex tableIndex = mysqlDimensionTable.curTable();
-                        // Use tableIndex.getRow but not mysqlDimensionTable.curTable().getRow. Consider that in some case
-                        // you may need to call mysqlDimensionTable.curTable() twice but the second call may correspond
-                        // to the newly reloaded dimension table which is not consistent with the first mysqlDimensionTable.curTable()
-                        Row commodity = tableIndex.getRow(row.getInteger("commodity_id"));
-                        return new Comparable[]{
-                                commodity.getString("name"),
-                                commodity.getInteger("price"),
-                                row.getInteger("count") * commodity.getInteger("price")
-                        };
-                    }
-                }, true, "commodity_name", "commodity_price", "total_price");
+                TableIndex tableIndex = mysqlDimensionTable.curTable();
+                table = table.leftJoin(tableIndex.getTable(), new JoinCriteria() {
+                            @Override
+                            public List<Integer> theOtherRows(Row thisRow) {
+                                // Use tableIndex.getRows but not mysqlDimensionTable.curTable().getRows. Consider the second
+                                // mysqlDimensionTable.curTable() may correspond to the newly reloaded dimension table which
+                                // is not consistent with the first mysqlDimensionTable.curTable() and tableIndex.getTable()
+                                return tableIndex.getRows(thisRow.getInteger("commodity_id"));
+                            }
+                        },
+                        new As().
+                                as("id", "order_id").
+                                build(),
+                        new As().
+                                as("name", "commodity_name").
+                                as("price", "commodity_price").
+                                build());
                 List<Table> tables = rehashForSlideWindow.rehash(table, myThreadIndex);
                 table = slideWindow.slide(tables);
                 tables = rehashForSessionWindow.rehash(table, myThreadIndex);
