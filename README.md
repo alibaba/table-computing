@@ -6,7 +6,15 @@ Table-Computing (Simplified as TC) is a distributed light weighted, high perform
 From our using experience TC can achieve milliseconds latency and 10+ times faster than Flink for complicated use cases.
 For the same streaming task we use TC achieved 10+ times computing resource saving.
 
-
+## Why we develop this framework 
+Relational operation is an effective tool to process and analyze data, SQL is a widely used implementation of relational operation. 
+But unfortunately SQL is not Turing-compete, we need UDF/Stored-procedure/UDAF/UDTF etc. to solve complicated business scenario. SQL is also not 
+very efficient for complicated case, whether SQL can high-powered execute depend on the SQL plan optimizer has optimized the use case which we 
+are using in the complicated business scenario. But more complicated scenario more difficult to guarantee every SQL use case had been optimized by the optimizer.
+Besides SQL that we can also use Flink DataStream/DataSet but we need very long code to implement a complex data processing task and we also need 
+to design the Execution-graph this is a complex art we need compound the operator or disjoint them then observe whether the adjusted graph is more efficient 
+and the task delay is acceptable, if not where is the bottleneck of this Execution-graph and how to resolve. Think that complex task usually include dozens 
+of operators which have lots of combinations, trying those maybe-efficient combinations is a heavy work.
 
 ## Example
 Computes the last hour top 100 sales volume ranking list every half hour
