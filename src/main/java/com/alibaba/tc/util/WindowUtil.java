@@ -10,11 +10,11 @@ import static java.lang.Math.min;
 
 public class WindowUtil {
     /**
-     * 返回columnName列的topN的下标
-     * @param rows
-     * @param columnName
-     * @param n
-     * @return
+     *
+     * @param rows          all rows
+     * @param columnName    compare by this column
+     * @param n             N
+     * @return              the top N indexes in rows compare by columnName column
      */
     public static int[] topN(List<Row> rows, String columnName, int n) {
         n = min(rows.size(), n);

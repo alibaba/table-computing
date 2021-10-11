@@ -84,17 +84,17 @@ public class SlsStreamTable extends AbstractStreamTable {
     }
 
     /**
-     * consumeFrom example: "2021-04-09 16:16:00"
      *
-     * @param thread
-     * @param endPoint
-     * @param accessId
-     * @param accessKey
-     * @param project
-     * @param logstore
-     * @param consumerGroup
-     * @param consumeFrom
-     * @param columnTypeMap
+     * @param thread                thread number
+     * @param endPoint              end point like: http://cn-shanghai-corp.sls.aliyuncs.com
+     * @param accessId              ak
+     * @param accessKey             sk
+     * @param project               project
+     * @param logstore              logstore
+     * @param consumerGroup         unique consumer group name for this logstore
+     * @param consumeFrom           example: "2021-04-09 16:16:00"
+     * @param columnTypeMap         stream table's columns and their types build by ColumnTypeBuilder
+     * @throws ParseException       if consumeFrom can not be parsed to a valid datetime this exception will be thrown
      */
     public SlsStreamTable(int thread,
                           String endPoint,
@@ -150,10 +150,10 @@ public class SlsStreamTable extends AbstractStreamTable {
     }
 
     /**
-     * 使用synchronized确保该值set之后其它线程可见
-     * sls自动分裂期间会导致shard的变化，通过一个延时确定在这个延时内shard没有变化且每个shard都已经消费到consumeTo了
-     * default: 30秒
-     * @param finishDelay
+     * use synchronized to assure the visibility of this.finishDelayMs in other thread
+     * when all shard have consumed to consumeTo time, maybe SLS is happening auto split shard wait a delay time to assure
+     * finish consume the pre-split-shard and two new split shard to consumeTo time
+     * @param finishDelay default: 30 seconds
      */
     public synchronized void setFinishDelaySeconds(Duration finishDelay) {
         this.finishDelayMs = finishDelay.toMillis();
@@ -176,7 +176,7 @@ public class SlsStreamTable extends AbstractStreamTable {
         private final SlsStreamTable slsStreamTable;
 
         private int shardId;
-        // 记录上次持久化Checkpoint的时间。
+        // last save checkpoint time
         private long mLastCheckTime = 0;
 
         LogHubProcessor(int threadId, SlsStreamTable slsStreamTable) {

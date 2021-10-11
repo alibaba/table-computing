@@ -16,6 +16,16 @@ public class MysqlDimensionTable extends RdsDimensionTable {
         super(jdbcUrl, tableName, userName, password, refreshInterval, columnTypeMap, primaryKeyColumnNames);
     }
 
+    /**
+     *
+     * @param jdbcUrl                   jdbc url like: jdbc:mysql://localhost:3306/e-commerce
+     * @param userName                  username
+     * @param password                  password
+     * @param refreshInterval           refresh interval
+     * @param sql                       sql to select from mysql
+     * @param columnTypeMap             dimension table's columns and their types build by ColumnTypeBuilder
+     * @param primaryKeyColumnNames     unique primary key column names
+     */
     public MysqlDimensionTable(String jdbcUrl,
                                String userName,
                                String password,
