@@ -6,9 +6,9 @@ import java.util.Set;
 
 public interface Row {
     /**
-     * ByteArray转成String返回避免踩坑
-     * @param comparable
-     * @return
+     * ByteArray to String to avoid unaware use ByteArray as String
+     * @param comparable    input value
+     * @return              if input value is ByteArray return String else return input value
      */
     default Comparable ifStr(Comparable comparable) {
         if (null != comparable && comparable instanceof ByteArray) {

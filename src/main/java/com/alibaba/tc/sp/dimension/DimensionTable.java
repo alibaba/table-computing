@@ -11,7 +11,8 @@ public abstract class DimensionTable {
     protected volatile TableIndex tableIndex;
 
     /**
-     * 对于只关心当前数据的场景可以使用该方法等待加载完成之后再开始读取上游的当前数据使业务延迟可以快速降下来
+     * for only care current data condition use this method to wait the dimension table finished loading then begin to consume
+     * from upstream on current time make the task delay rapidly decrease
      */
     public void waitForReady() {
         while (null == tableIndex) {
@@ -24,8 +25,18 @@ public abstract class DimensionTable {
     }
 
     /**
-     * 获取最新的TableIndex，使用方通过使用同一个TableIndex避免join时返回的行号不在right table里或者脏行号的问题
-     * @return
+     *
+     * @return the newest TableIndex, use like below utilization to avoid data inconsistent problem:
+     * TableIndex tableIndex = dimensionTable.curTable();
+     * table = table.leftJoin(tableIndex.getTable(), new JoinCriteria() {
+     *      @Override
+     *      public List<Integer> theOtherRows(Row thisRow) {
+     *          // Use tableIndex.getRows but not mysqlDimensionTable.curTable().getRows. Consider the second
+     *          // mysqlDimensionTable.curTable() may correspond to the newly reloaded dimension table which
+     *          // is not consistent with the first mysqlDimensionTable.curTable() and tableIndex.getTable()
+     *          return tableIndex.getRows(...);
+     *      }
+     * }...
      */
     public TableIndex curTable() {
         waitForReady();

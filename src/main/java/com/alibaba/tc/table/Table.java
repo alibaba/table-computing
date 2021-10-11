@@ -300,7 +300,12 @@ public class Table {
     }
 
     /**
-     * scalarFunction 返回null的将被过滤掉
+     *
+     * @param scalarFunction        will pass every row to this function, returned array size must be equal to
+     *                              additionalColumns.length, return null this row will be filtered
+     * @param selectAll             whether select all columns
+     * @param additionalColumns     if selectAll is true this is additional columns, else this will be all new columns
+     * @return                      the new generated table
      */
     public Table select(ScalarFunction scalarFunction, boolean selectAll, String... additionalColumns) {
         List<Column> columns = genColumns(additionalColumns, selectAll);
@@ -320,9 +325,18 @@ public class Table {
 
         return new Table(columns);
     }
-    
+
     /**
-     * scalarFunction 返回null或transformFunction返回null或空的将被过滤掉
+     *
+     * @param scalarFunction        will pass every row to this function, returned array size add transformFunction returned
+     *                              element size in list must be equal to additionalColumns.length, return null this row
+     *                              will be filtered
+     * @param transformFunction     will pass every row to this function, returned element size in list add scalarFunction
+     *                              returned array size must be equal to additionalColumns.length and all element size in
+     *                              list must be equal. return null or empty list this row will be filtered
+     * @param selectAll             whether select all columns
+     * @param additionalColumns     if selectAll is true this is additional columns, else this will be all new columns
+     * @return                      the new generated table
      */
     public Table select(ScalarFunction scalarFunction, TransformFunction transformFunction, boolean selectAll, String... additionalColumns) {
         List<Column> columns = genColumns(additionalColumns, selectAll);
