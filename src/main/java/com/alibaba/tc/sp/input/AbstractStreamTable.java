@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -47,6 +48,7 @@ public abstract class AbstractStreamTable implements StreamTable {
     protected final QueueSizeLogger queueSizeLogger = new QueueSizeLogger();
     protected final QueueSizeLogger recordSizeLogger = new QueueSizeLogger();
     protected long sleepMs = 100;
+    private final Random random = new Random();
 
     protected final List<ArrayBlockingQueue<Table>> arrayBlockingQueueList;
 
@@ -102,12 +104,15 @@ public abstract class AbstractStreamTable implements StreamTable {
     @Override
     final public Table consume() throws InterruptedException {
         while (true) {
-            for (int i = 0; i < arrayBlockingQueueList.size(); i++) {
+            int start = random.nextInt(arrayBlockingQueueList.size());
+            int i = start;
+            do {
                 Table table = arrayBlockingQueueList.get(i).poll();
                 if (null != table) {
                     return table;
                 }
-            }
+                i = (i + 1) % arrayBlockingQueueList.size();
+            } while (i != start);
 
             //For no continuous data case return an empty table after sleep 100ms (default)
             // to trigger computing, else the watermark data/window data/rehashed or rebalanced to other server/thread data will never be computed
