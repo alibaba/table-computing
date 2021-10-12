@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>  
   <groupId>com.alibaba</groupId>  
   <artifactId>table-computing-ali</artifactId>  
-  <version>1.0.2-SNAPSHOT</version>  
+  <version>1.0.3-SNAPSHOT</version>
   <parent> 
     <artifactId>parent-pom</artifactId>  
     <groupId>com.alibaba</groupId>  
