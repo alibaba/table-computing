@@ -126,6 +126,11 @@ java -Dself=localhost:9999 -Dall=localhost:8888,localhost:9999 -jar my_task.jar 
 2. -Xmx parameter should be appropriate. Since the table data are all store on the off-heap memory to improve performance too large
  -Xmx will lead to belatedly memory release which may give rise to OOM, while too small -Xmx will lead to too frequently GC to reduce 
  the throughput.
+3. Not only the old GC stop the world young GC also stop the world transiently, more threads means more garbage generation
+ means more GC means more often STW means thread CPU usage cannot be raised, you may find use more StreamProcessing 
+ thread cannot increase the throughput now you should start a new JVM (can be on the same machine use localhost:anotherPort). 
+ Actually use N thread can not get N times throughput you may need start a new JVM, you can also use `top -H -p pid` to 
+ see whether the compute-X named threads CPU usage approximate 100% to make your decision. 
 
 
 
