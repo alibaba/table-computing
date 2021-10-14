@@ -620,10 +620,9 @@ public class Table {
     }
 
     /**
-     * 取columnNames指定的所有列构成的表返回
-     * 注意：返回的是列的引用
-     * @param columnNames
-     * @return
+     * Notice: returned table compound with the references of this table's columns
+     * @param columnNames   column names
+     * @return table compound with the references of this table's columns denote by columnNames
      */
     public Table project(String... columnNames) {
         List<Column> columns = new ArrayList<>(columnNames.length);
@@ -634,10 +633,9 @@ public class Table {
     }
 
     /**
-     * 取除了columnNames指定的列之外的列构成的表返回
-     * 注意：返回的是列的引用
-     * @param columnNames
-     * @return
+     * Notice: returned table compound with the references of this table's columns
+     * @param columnNames   except column names
+     * @return table compound with the references of this table's columns except the columns denote by columnNames
      */
     public Table projectNegative(String... columnNames) {
         List<Column> columns = new ArrayList<>(this.columns.size() - columnNames.length);

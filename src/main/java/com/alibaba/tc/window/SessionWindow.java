@@ -88,7 +88,7 @@ public class SessionWindow extends TimeWindow {
     /**
      * enter window and trigger compute if a window is timeout
      * @param tables come from Rehash.rehash or Rehash.rebalance
-     * @return
+     * @return the table compound with the rows returned by the windowFunction with the input of timeout windows
      */
     public Table session(List<Table> tables) {
         checkTablesSize(tables);
