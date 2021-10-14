@@ -25,18 +25,24 @@ public abstract class DimensionTable {
     }
 
     /**
-     *
-     * @return the newest TableIndex, use like below utilization to avoid data inconsistent problem:
-     * TableIndex tableIndex = dimensionTable.curTable();
-     * table = table.leftJoin(tableIndex.getTable(), new JoinCriteria() {
-     *      @Override
-     *      public List<Integer> theOtherRows(Row thisRow) {
-     *          // Use tableIndex.getRows but not mysqlDimensionTable.curTable().getRows. Consider the second
-     *          // mysqlDimensionTable.curTable() may correspond to the newly reloaded dimension table which
-     *          // is not consistent with the first mysqlDimensionTable.curTable() and tableIndex.getTable()
-     *          return tableIndex.getRows(...);
-     *      }
-     * }...
+     * <p>
+     * use like below example to avoid data inconsistent problem:
+     * <pre>
+TableIndex tableIndex = dimensionTable.curTable();
+table = table.leftJoin(tableIndex.getTable(), new JoinCriteria() {
+    <literal>@Override</literal>
+    public{@code List<Integer>} theOtherRows(Row thisRow) {
+        // Use tableIndex.getRows but not
+        // mysqlDimensionTable.curTable().getRows. Consider the second
+        // mysqlDimensionTable.curTable() may correspond to the newly
+        // reloaded dimension table which is not consistent with the first
+        // mysqlDimensionTable.curTable() and tableIndex.getTable()
+        return tableIndex.getRows(...);
+     }
+}...
+     * </pre>
+     * </p>
+     * @return the newest TableIndex
      */
     public TableIndex curTable() {
         waitForReady();

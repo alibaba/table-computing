@@ -76,14 +76,6 @@ public class KafkaStreamTable extends AbstractStreamTable {
         this(bootstrapServers, consumerGroupId, topic, consumeFrom, -1, columnTypeMap);
     }
 
-    /**
-     * @param bootstrapServers
-     * @param consumerGroupId
-     * @param topic
-     * @param consumeFrom
-     * @param consumeTo
-     * @param columnTypeMap
-     */
     public KafkaStreamTable(String bootstrapServers,
                             String consumerGroupId,
                             String topic,
