@@ -58,7 +58,7 @@ public class OverWindowByDuration extends TimeWindow {
      *
      * @param tables should be returned by Rehash.rehash() else may occur to logical error. you can only rehash once then use in multiple windows. we
      *               auto rehash in window operation may lead to low performance.
-     * @return
+     * @return       result table
      */
     public Table over(List<Table> tables) {
         checkTablesSize(tables);

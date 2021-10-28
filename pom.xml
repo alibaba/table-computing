@@ -162,6 +162,9 @@ under the License.
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:none</additionalJOption>
+                    </additionalJOptions>
                 </configuration>
                 <executions>
                     <execution>
