@@ -117,12 +117,12 @@ public class AliHbaseOutputTable extends AbstractOutputTable {
                                 Put put = new Put(rk);
                                 for (int j = 0; j < columns.size(); j++) {
                                     if (null != columns.get(j).get(i)) {
-                                        put.add(columns.get(j).name().getBytes(),
-                                                columnFamily,
+                                        put.add(columnFamily,
+                                                columns.get(j).name().getBytes(),
                                                 ((ByteArray) columns.get(j).get(i)).getBytes());
                                     } else {
-                                        put.add(columns.get(j).name().getBytes(),
-                                                columnFamily,
+                                        put.add(columnFamily,
+                                                columns.get(j).name().getBytes(),
                                                 null);
                                     }
                                 }
