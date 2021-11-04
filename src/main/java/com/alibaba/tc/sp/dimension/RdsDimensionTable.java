@@ -123,6 +123,9 @@ public class RdsDimensionTable extends DimensionTable {
                                     pre = now;
                                 }
                             }
+                            resultSet.close();
+                            preparedStatement.close();
+                            connection.close();
 
                             Table table = tableBuilder.build();
                             Index index = table.createIndex(primaryKeyColumnNames);
