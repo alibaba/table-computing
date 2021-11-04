@@ -110,6 +110,9 @@ public class TddlDimensionTable extends DimensionTable {
                                     pre = now;
                                 }
                             }
+                            resultSet.close();
+                            tGroupPreparedStatement.close();
+                            tGroupConnection.close();
 
                             Table table = tableBuilder.build();
                             Index index = table.createIndex(primaryKeyColumnNames);
@@ -118,7 +121,7 @@ public class TddlDimensionTable extends DimensionTable {
                         } catch (Throwable t) {
                             logger.error("", t);
                             try {
-                                Thread.sleep(10_000);
+                                Thread.sleep(123_000);
                                 run();
                             } catch (Throwable t1) {
                                 logger.error("", t1);
