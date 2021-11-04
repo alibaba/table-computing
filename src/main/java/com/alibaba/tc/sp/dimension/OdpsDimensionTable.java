@@ -150,6 +150,7 @@ public class OdpsDimensionTable extends DimensionTable {
                                     pre = now;
                                 }
                             }
+                            recordReader.close();
 
                             Table table = tableBuilder.build();
                             Index index = table.createIndex(primaryKeyColumnNames);
