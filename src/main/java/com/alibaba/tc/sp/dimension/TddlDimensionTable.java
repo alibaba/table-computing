@@ -25,7 +25,7 @@ public class TddlDimensionTable extends DimensionTable {
     private static final Logger logger = LoggerFactory.getLogger(TddlDimensionTable.class);
 
     private final String appName;
-    private final String tableName;
+    private final String groupName;
     private final String ak;
     private final String sk;
     private final Duration refreshInterval;
@@ -41,8 +41,28 @@ public class TddlDimensionTable extends DimensionTable {
                               Duration refreshInterval,
                               Map<String, Type> columnTypeMap,
                               String... primaryKeyColumnNames) {
+        this(appName,
+                appName.replaceFirst("_APP$", "_GROUP"),
+                format("select %s from %s", String.join(",", columnTypeMap.keySet()), tableName),
+                ak,
+                sk,
+                null,
+                refreshInterval,
+                columnTypeMap,
+                primaryKeyColumnNames);
+    }
+
+    public TddlDimensionTable(String appName,
+                              String groupName,
+                              String sql,
+                              String ak,
+                              String sk,
+                              String unitName,
+                              Duration refreshInterval,
+                              Map<String, Type> columnTypeMap,
+                              String... primaryKeyColumnNames) {
         this.appName = requireNonNull(appName);
-        this.tableName = requireNonNull(tableName);
+        this.groupName = requireNonNull(groupName);
         this.ak = requireNonNull(ak);
         this.sk = requireNonNull(sk);
         this.refreshInterval = requireNonNull(refreshInterval);
@@ -55,8 +75,8 @@ public class TddlDimensionTable extends DimensionTable {
             throw new IllegalArgumentException();
         }
 
-        this.myName = format("%s-%s-%s", this.getClass().getSimpleName(), appName, tableName);
-        this.sql = format("select %s from %s", String.join(",", columnTypeMap.keySet()), tableName);
+        this.myName = format("%s-%s-%s", this.getClass().getSimpleName(), appName, sql.substring(0, sql.length() > 20 ? 20 : sql.length()));
+        this.sql = requireNonNull(sql);
 
         new ScheduledThreadPoolExecutor(1, threadsNamed(myName)).
                 scheduleWithFixedDelay(new Runnable() {
@@ -67,10 +87,11 @@ public class TddlDimensionTable extends DimensionTable {
                             logger.info("begin to load {}", myName);
                             TableBuilder tableBuilder = new TableBuilder(columnTypeMap);
                             TGroupDataSource tGroupDataSource = new TGroupDataSource();
-                            tGroupDataSource.setDbGroupKey(appName.replaceFirst("_APP$", "_GROUP"));
+                            tGroupDataSource.setDbGroupKey(groupName);
                             tGroupDataSource.setAppName(appName);
                             tGroupDataSource.setAccessKey(ak);
                             tGroupDataSource.setSecretKey(sk);
+                            tGroupDataSource.setUnitName(unitName);
                             tGroupDataSource.init();
                             TGroupConnection tGroupConnection = tGroupDataSource.getConnection();
                             TGroupPreparedStatement tGroupPreparedStatement = tGroupConnection.prepareStatement(sql);

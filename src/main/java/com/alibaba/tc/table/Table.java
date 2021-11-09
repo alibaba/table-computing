@@ -239,6 +239,10 @@ public class Table {
         return size;
     }
 
+    public boolean isEmpty() {
+        return size <= 0;
+    }
+
     public Index createIndex(String... columnNames) {
         if (null == columnNames || columnNames.length < 1) {
             throw new IllegalArgumentException("at least one column to create index");

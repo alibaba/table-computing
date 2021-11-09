@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>  
   <groupId>com.alibaba</groupId>  
   <artifactId>table-computing-ali</artifactId>  
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>  
   <parent> 
     <artifactId>parent-pom</artifactId>  
     <groupId>com.alibaba</groupId>  
@@ -168,13 +168,13 @@
       <plugin> 
         <groupId>org.apache.maven.plugins</groupId>  
         <artifactId>maven-javadoc-plugin</artifactId>  
-        <version>2.10.4</version>
+        <version>2.10.4</version>  
         <configuration> 
           <encoding>UTF-8</encoding>  
-          <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
-          <additionalJOptions>
-            <additionalJOption>-Xdoclint:none</additionalJOption>
-          </additionalJOptions>
+          <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>  
+          <additionalJOptions> 
+            <additionalJOption>-Xdoclint:none</additionalJOption> 
+          </additionalJOptions> 
         </configuration>  
         <executions> 
           <execution> 
@@ -197,5 +197,5 @@
       </plugin> 
     </plugins> 
   </build>  
-  <contributors><contributor><properties><provider>shanqiang.sq@alibaba-inc.com</provider><codeName>null</codeName><codeUrl>git@github.com:alibaba/table-computing.git commit:4c751f2</codeUrl><description>contributors added by SCM Plugin, please don't modify it!</description></properties></contributor></contributors>
+  <contributors><contributor><properties><provider>shanqiang.sq@alibaba-inc.com</provider><codeName>null</codeName><codeUrl>git@github.com:alibaba/table-computing.git commit:73cf9cb</codeUrl><description>contributors added by SCM Plugin, please don't modify it!</description></properties></contributor></contributors>
 </project>

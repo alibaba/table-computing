@@ -160,7 +160,7 @@ public class SdbOutputTable extends AbstractOutputTable {
         putTable(table);
     }
 
-    public int insert(OkHttpClient httpClient, List<Object> objectList) throws IOException {
+    private int insert(OkHttpClient httpClient, List<Object> objectList) throws IOException {
         String resp = "";
         if (objectList.size() <= 0) {
             return 0;
