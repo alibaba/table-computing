@@ -238,6 +238,10 @@ public class Table {
     public int size() {
         return size;
     }
+    
+    public boolean isEmpty() {
+        return size <= 0;
+    }
 
     public Index createIndex(String... columnNames) {
         if (null == columnNames || columnNames.length < 1) {

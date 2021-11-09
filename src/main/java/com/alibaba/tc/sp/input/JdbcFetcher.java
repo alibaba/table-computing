@@ -57,7 +57,13 @@ public abstract class JdbcFetcher {
                 i++;
             }
         }
+        resultSet.close();
+        preparedStatement.close();
 
         return tableBuilder.build();
+    }
+
+    public void close() throws SQLException {
+        connection.close();
     }
 }
