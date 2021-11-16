@@ -3,3 +3,4 @@ jstream.iml
 target
 logs
 *.svg
+*.iml
