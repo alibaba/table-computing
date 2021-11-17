@@ -75,6 +75,11 @@ public class StreamProcessing {
     }
 
     public void compute(Compute compute) {
+        computeNoWait(compute);
+        join();
+    }
+
+    public void computeNoWait(Compute compute) {
         for (int i = 0; i < streamTables.length; i++) {
             streamTables[i].start();
         }
@@ -101,9 +106,6 @@ public class StreamProcessing {
         for (int i = 0; i < thread; i++) {
             computeThreads.get(i).start();
         }
-
-        join();
-        finishTime = 0;
     }
 
     public void stop() {
@@ -118,7 +120,7 @@ public class StreamProcessing {
         }
     }
 
-    private void join() {
+    public void join() {
         throwIf();
         for (int i = 0; i < thread; i++) {
             try {
@@ -130,5 +132,7 @@ public class StreamProcessing {
         }
         computeThreads.clear();
         throwIf();
+
+        finishTime = 0;
     }
 }
