@@ -44,9 +44,6 @@ under the License.
         <connection>git@github.com:alibaba/table-computing.git</connection>
         <developerConnection>scm:git:https://github.com/alibaba/table-computing.git</developerConnection>
     </scm>
-    <modules>
-        <module>state</module>
-    </modules>
 
     <dependencies>
         <dependency>
