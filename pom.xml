@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>  
   <groupId>com.alibaba</groupId>  
   <artifactId>table-computing-ali</artifactId>  
-  <version>1.0.7-SNAPSHOT</version>  
+  <version>1.0.8-SNAPSHOT</version>  
   <parent> 
     <artifactId>parent-pom</artifactId>  
     <groupId>com.alibaba</groupId>  
@@ -197,5 +197,5 @@
       </plugin> 
     </plugins> 
   </build>  
-  <contributors><contributor><properties><provider>null</provider><codeName>null</codeName><codeUrl>git@github.com:alibaba/table-computing.git commit:d4647ec</codeUrl><description>contributors added by SCM Plugin, please don't modify it!</description></properties></contributor></contributors>
+  <contributors><contributor><properties><provider>shanqiang.sq@alibaba-inc.com</provider><codeName>null</codeName><codeUrl>git@github.com:alibaba/table-computing.git commit:be0426e</codeUrl><description>contributors added by SCM Plugin, please don't modify it!</description></properties></contributor></contributors>
 </project>
