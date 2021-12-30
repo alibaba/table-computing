@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
@@ -167,6 +168,9 @@ public class SdbOutputTable extends AbstractOutputTable {
         }
         StringBuilder sb = new StringBuilder();
         for (Object object : objectList) {
+            if (object instanceof BigDecimal) {
+                object = object.toString();
+            }
             if (object instanceof String || object instanceof ByteArray) {
                 sb.append('\'');
                 sb.append(object.toString().replaceAll("'", "''"));
