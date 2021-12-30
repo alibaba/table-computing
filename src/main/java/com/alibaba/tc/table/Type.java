@@ -3,13 +3,16 @@ package com.alibaba.tc.table;
 import com.alibaba.tc.exception.UnknownTypeException;
 import com.alibaba.tc.offheap.ByteArray;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.JDBCType;
 
 public enum Type {
     VARCHAR,
     INT,
     BIGINT,
-    DOUBLE;
+    DOUBLE,
+    BIGDECIMAL;
 
     private static Type[] cache = values();
     public static Type valueOf(int ordinal) {
@@ -34,6 +37,9 @@ public enum Type {
         if (clazz == ByteArray.class || clazz == String.class) {
             return VARCHAR;
         }
+        if (clazz == BigDecimal.class) {
+            return BIGDECIMAL;
+        }
 
         throw new UnknownTypeException(object.getClass().getName());
     }
@@ -41,6 +47,7 @@ public enum Type {
     public static JDBCType toJDBCType(Type type) {
         switch (type) {
             case VARCHAR:
+            case BIGDECIMAL:
                 return JDBCType.VARCHAR;
             case INT:
                 return JDBCType.INTEGER;

@@ -1,14 +1,18 @@
 package com.alibaba.tc.table;
 
-import static com.alibaba.tc.util.ScalarUtil.toDouble;
-import static com.alibaba.tc.util.ScalarUtil.toInteger;
-import static com.alibaba.tc.util.ScalarUtil.toLong;
-import static com.alibaba.tc.util.ScalarUtil.toStr;
+import java.math.BigDecimal;
+
+import static com.alibaba.tc.util.ScalarUtil.*;
 
 public abstract class AbstractRow implements Row {
     @Override
     public String getString(String columnName) {
         return toStr(get(columnName));
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(String columnName) {
+        return toBigDecimal(get(columnName));
     }
 
     @Override
@@ -29,6 +33,11 @@ public abstract class AbstractRow implements Row {
     @Override
     public String getString(int index) {
         return toStr(get(index));
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(int index) {
+        return toBigDecimal(get(index));
     }
 
     @Override

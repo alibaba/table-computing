@@ -2,6 +2,7 @@ package com.alibaba.tc.table;
 
 import com.alibaba.tc.offheap.ByteArray;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 public interface Row {
@@ -26,10 +27,12 @@ public interface Row {
     Comparable get(int index);
     Comparable get(String columnName);
     String getString(String columnName);
+    BigDecimal getBigDecimal(String columnName);
     Double getDouble(String columnName);
     Long getLong(String columnName);
     Integer getInteger(String columnName);
     String getString(int index);
+    BigDecimal getBigDecimal(int index);
     Double getDouble(int index);
     Long getLong(int index);
     Integer getInteger(int index);

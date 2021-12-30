@@ -6,16 +6,14 @@ import com.alibaba.tc.offheap.InternalUnsafe;
 import com.alibaba.tc.offheap.VarbyteBufferOffheap;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
 import static com.alibaba.tc.offheap.InternalUnsafe.getInt;
 import static com.alibaba.tc.offheap.InternalUnsafe.putInt;
 import static com.alibaba.tc.offheap.InternalUnsafe.putLong;
 import static com.alibaba.tc.ArrayUtil.DEFAULT_CAPACITY;
-import static com.alibaba.tc.util.ScalarUtil.toDouble;
-import static com.alibaba.tc.util.ScalarUtil.toInteger;
-import static com.alibaba.tc.util.ScalarUtil.toLong;
-import static com.alibaba.tc.util.ScalarUtil.toStr;
+import static com.alibaba.tc.util.ScalarUtil.*;
 import static java.lang.String.format;
 import static sun.misc.Unsafe.ARRAY_BYTE_BASE_OFFSET;
 
@@ -165,6 +163,9 @@ public class Column<T extends Comparable> implements Serializable {
             case VARCHAR:
                 this.column = new VarbyteColumn(this.initSize);
                 break;
+            case BIGDECIMAL:
+                this.column = new BigDecimalColumn(this.initSize);
+                break;
             case INT:
                 this.column = new IntColumn(this.initSize);
                 break;
@@ -221,6 +222,10 @@ public class Column<T extends Comparable> implements Serializable {
 
     public String getString(int row) {
         return toStr(get(row));
+    }
+
+    public BigDecimal getBigDecimal(int row) {
+        return toBigDecimal(get(row));
     }
 
     public Double getDouble(int row) {
