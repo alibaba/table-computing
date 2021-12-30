@@ -68,4 +68,8 @@ public class DynamicVarbyteBufferOffheap {
     public ByteArray get(long offset, long length) {
         return new ByteArray(varbyteBufferOffheap.get(offset, length));
     }
+
+    public byte[] getBytes(long offset, long length) {
+        return varbyteBufferOffheap.get(offset, length);
+    }
 }

@@ -2,6 +2,8 @@ package com.alibaba.tc.util;
 
 import com.google.common.base.CharMatcher;
 
+import java.math.BigDecimal;
+
 public class ScalarUtil {
     public static Integer toInteger(Object object) {
         return null == object ? null : (Integer) object;
@@ -17,6 +19,10 @@ public class ScalarUtil {
 
     public static String toStr(Object object) {
         return null == object ? null : object.toString();
+    }
+
+    public static BigDecimal toBigDecimal(Object object) {
+        return null == object ? null : (BigDecimal) object;
     }
 
     public static String substr(Object object, int begin, int end) {

@@ -3,6 +3,7 @@ package com.alibaba.tc.table;
 import com.alibaba.tc.exception.UnknownTypeException;
 import com.alibaba.tc.offheap.ByteArray;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,6 +76,9 @@ public class TableBuilder {
                 case INT:
                     comparable = parseInt(string);
                     break;
+                case BIGDECIMAL:
+                    comparable = new BigDecimal(string);
+                    break;
                 default:
                     throw new UnknownTypeException(type.name());
             }
@@ -102,6 +106,11 @@ public class TableBuilder {
     }
 
     public TableBuilder append(int index, String value) {
+        appendValue(index, value);
+        return this;
+    }
+
+    public TableBuilder append(int index, BigDecimal value) {
         appendValue(index, value);
         return this;
     }

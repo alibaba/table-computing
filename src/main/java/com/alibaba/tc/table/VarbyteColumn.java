@@ -1,11 +1,14 @@
 package com.alibaba.tc.table;
 
 import com.alibaba.tc.ArrayUtil;
+import com.alibaba.tc.exception.UnknownTypeException;
 import com.alibaba.tc.offheap.ByteArray;
 import com.alibaba.tc.offheap.ByteBufferOffheap;
 import com.alibaba.tc.offheap.DynamicVarbyteBufferOffheap;
 import com.alibaba.tc.offheap.LongBufferOffheap;
 import com.alibaba.tc.offheap.VarbyteBufferOffheap;
+
+import java.math.BigDecimal;
 
 import static com.alibaba.tc.offheap.InternalUnsafe.copyMemory;
 import static com.alibaba.tc.offheap.InternalUnsafe.getLong;
@@ -116,18 +119,33 @@ public class VarbyteColumn implements ColumnInterface {
 
     @Override
     public void add(Comparable comparable) {
+        addObject(comparable);
+    }
+
+    public void addBytes(byte[] bytes) {
+        addObject(bytes);
+    }
+
+    private void addObject(Object object) {
         grow();
-        if (null == comparable) {
+        if (null == object) {
             if (null == valueIsNull) {
                 valueIsNull = new ByteBufferOffheap(capacity);
                 valueIsNull.init();
             }
             valueIsNull.set(size, (byte) 1);
         } else {
-            if (comparable.getClass() == String.class) {
-                values.add(((String) comparable));
+            Class clazz = object.getClass();
+            if (clazz == String.class) {
+                values.add(((String) object));
+            } else if (clazz == ByteArray.class) {
+                values.add((ByteArray) object);
+            } else if (clazz == BigDecimal.class) {
+                values.add(object.toString());
+            } else if (clazz == byte[].class) {
+                values.add((byte[]) object);
             } else {
-                values.add((ByteArray) comparable);
+                throw new UnknownTypeException(null == clazz ? "null type" : clazz.getName());
             }
         }
         addEnd();
@@ -175,6 +193,17 @@ public class VarbyteColumn implements ColumnInterface {
         if (checkNull(index)) {
             return null;
         }
-        return values.get(offsets.get(index), offsets.get(index + 1) - offsets.get(index));
+        return new ByteArray(bytes(index));
+    }
+
+    public byte[] getBytes(int index) {
+        if (checkNull(index)) {
+            return null;
+        }
+        return bytes(index);
+    }
+
+    private byte[] bytes(int index) {
+        return values.getBytes(offsets.get(index), offsets.get(index + 1) - offsets.get(index));
     }
 }
