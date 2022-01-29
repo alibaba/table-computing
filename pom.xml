@@ -45,6 +45,9 @@ under the License.
         <developerConnection>scm:git:https://github.com/alibaba/table-computing.git</developerConnection>
     </scm>
 
+    <properties>
+        <odps.version>0.38.3-public</odps.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
@@ -69,7 +72,7 @@ under the License.
         <dependency>
             <groupId>com.aliyun.odps</groupId>
             <artifactId>odps-sdk-core</artifactId>
-            <version>0.37.5</version>
+            <version>${odps.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>protobuf-java</artifactId>
@@ -80,7 +83,7 @@ under the License.
         <dependency>
             <groupId>com.aliyun.odps</groupId>
             <artifactId>odps-sdk-commons</artifactId>
-            <version>0.37.5</version>
+            <version>${odps.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -125,7 +128,7 @@ under the License.
         <dependency>
             <groupId>com.aliyun.openservices</groupId>
             <artifactId>loghub-client-lib</artifactId>
-            <version>0.6.39</version>
+            <version>0.6.41</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
