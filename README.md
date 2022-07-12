@@ -132,9 +132,9 @@ sp.compute(new Compute() {
 ```
 Distributed deploy your table-computing task:
 
-java -Dself=localhost:8888 -Dall=localhost:8888,localhost:9999 -jar my_task.jar -cp table-computing-1.0.0.jar;my_other_dependencies...
+java -Xmx40g -jar my_task.jar -Dself=localhost:8888 -Dall=localhost:8888,localhost:9999
 
-java -Dself=localhost:9999 -Dall=localhost:8888,localhost:9999 -jar my_task.jar -cp table-computing-1.0.0.jar;my_other_dependencies...
+java -Xmx40g -jar my_task.jar -Dself=localhost:9999 -Dall=localhost:8888,localhost:9999
 
 
 
