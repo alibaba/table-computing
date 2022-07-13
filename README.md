@@ -132,9 +132,9 @@ sp.compute(new Compute() {
 ```
 Distributed deploy your table-computing task:
 
-java -Xmx40g -jar my_task.jar -Dself=localhost:8888 -Dall=localhost:8888,localhost:9999
+java -Xmx100g -XX:MaxDirectMemorySize=500g -Dself=localhost:8888 -Dall=localhost:8888,localhost:9999 -jar my_task.jar
 
-java -Xmx40g -jar my_task.jar -Dself=localhost:9999 -Dall=localhost:8888,localhost:9999
+java -Xmx100g -XX:MaxDirectMemorySize=500g -Dself=localhost:9999 -Dall=localhost:8888,localhost:9999 -jar my_task.jar
 
 
 
